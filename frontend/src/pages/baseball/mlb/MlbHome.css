@@ -1,0 +1,197 @@
+.mlb-hub-container {
+  padding: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mlb-hero {
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.mlb-hero-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  background-color: rgba(56, 189, 248, 0.1);
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.mlb-hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0 0 0.5rem 0;
+}
+
+.mlb-hero-subtitle {
+  font-size: 1rem;
+  color: #94a3b8;
+  max-width: 720px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mlb-season-section {
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.section-meta {
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* 3-Column Card Layout */
+.season-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.season-card {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.season-card:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.season-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.season-year {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.status-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+}
+
+.status-pill.regular {
+  background-color: #0369a1;
+  color: #e0f2fe;
+}
+
+.status-pill.postseason {
+  background-color: #7c2d12;
+  color: #ffedd5;
+}
+
+.season-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.5rem 0;
+}
+
+.season-card-desc {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin: 0 0 1.5rem 0;
+}
+
+.season-card-footer {
+  border-top: 1px solid #1e293b;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-summary {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.arrow-btn {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+/* Archive Box */
+.mlb-archive-section {
+  background-color: #0b1329;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.archive-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.archive-info h3 {
+  font-size: 1.125rem;
+  color: #f8fafc;
+  margin: 0 0 0.25rem 0;
+}
+
+.archive-info p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.archive-btn {
+  background-color: #1e293b;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.archive-btn:hover {
+  background-color: #334155;
+  color: #f8fafc;
+}

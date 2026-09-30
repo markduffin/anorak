@@ -1,0 +1,161 @@
+.left-rail {
+  background-color: #0b1329;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  transition: width 0.2s ease-in-out;
+  user-select: none;
+  z-index: 40;
+}
+
+.left-rail.expanded {
+  width: 240px;
+}
+
+.left-rail.collapsed {
+  width: 64px;
+}
+
+.rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #1e293b;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+.rail-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.collapse-btn {
+  background: transparent;
+  border: 1px solid #1e293b;
+  border-radius: 4px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.collapse-btn:hover {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+.rail-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.rail-divider {
+  height: 1px;
+  background-color: #1e293b;
+  margin: 0.5rem 0.75rem;
+}
+
+.rail-link,
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  text-align: left;
+  box-sizing: border-box;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.rail-link:hover,
+.accordion-trigger:hover {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+.rail-link.active,
+.accordion-trigger.active-parent {
+  color: #38bdf8;
+  background-color: #0f2444;
+}
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 0.75rem;
+}
+
+.collapsed .icon-wrapper {
+  margin-right: 0;
+  width: 100%;
+}
+
+.label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+  color: #64748b;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  background-color: #080d1a;
+  display: flex;
+  flex-direction: column;
+}
+
+.leaf-overview-btn,
+.leaf-link {
+  padding: 0.45rem 1rem 0.45rem 3.25rem;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.leaf-overview-btn {
+  color: #64748b;
+  font-style: italic;
+}
+
+.leaf-overview-btn:hover,
+.leaf-link:hover {
+  color: #f8fafc;
+}
+
+.leaf-link.active {
+  color: #38bdf8;
+  font-weight: 600;
+  background-color: #0c1a30;
+}
