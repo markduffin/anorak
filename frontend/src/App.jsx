@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LeftNav from './components/navigation/LeftNav';
 import MlbHome from './pages/baseball/mlb/MlbHome';
 import CompetitionSeason from './pages/baseball/mlb/CompetitionSeason';
+import TeamSeason from './pages/baseball/mlb/TeamSeason';
 
 function PlaceholderPage({ title, note }) {
   return (
@@ -31,13 +32,19 @@ export default function App() {
             {/* MLB Hub */}
             <Route path="/sports/baseball/competitions/mlb" element={<MlbHome />} />
             
-            {/* Active Competition Season Page */}
+            {/* Competition Season View */}
             <Route path="/sports/baseball/competitions/mlb/seasons/:year" element={<CompetitionSeason />} />
             
             {/* Team Season View */}
             <Route 
               path="/sports/baseball/competitions/mlb/seasons/:year/teams/:teamId" 
-              element={<PlaceholderPage title="Team Season Page" note="Roster splits and team seasonal statistics." />} 
+              element={<TeamSeason />} 
+            />
+
+            {/* Player Digital Baseball Card (Future leaf node) */}
+            <Route 
+              path="/sports/baseball/players/:playerId" 
+              element={<PlaceholderPage title="Baseball Card Profile" note="Player career logs and bio vitals." />} 
             />
 
             <Route path="/sports/:sportSlug" element={<PlaceholderPage title="Sport Hub" note="Directory of competitions." />} />

@@ -1,42 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './MlbHome.css';
 
 export default function MlbHome() {
-  const currentSeason = 2026;
+  const navigate = useNavigate();
+  const currentYear = 2026;
+  const [customYear, setCustomYear] = useState('');
 
-  const activeSeasons = [
-    {
-      year: 2026,
-      segment: 'regular',
-      title: '2026 Regular Season',
-      tag: 'Completed Campaign',
-      status: 'active',
-      description:
-        'Complete 162-game team records, full division splits, and final player rosters.',
-      statsSummary: '30 Teams • Full Rosters & Stints • 6 Divisions'
-    },
-    {
-      year: 2025,
-      segment: 'regular',
-      title: '2025 Regular Season',
-      tag: 'Final Standings',
-      status: 'final',
-      description:
-        'Official division finishes, win/loss records, and player hitting, pitching & fielding statistics.',
-      statsSummary: '30 Teams • 162 Games • Complete Stats'
-    },
-    {
-      year: 2025,
-      segment: 'postseason',
-      title: '2025 Post Season',
-      tag: 'Playoff Bracket',
-      status: 'postseason',
-      description:
-        'Postseason bracket progression from Wild Card through World Series, linking to participating teams.',
-      statsSummary: 'Wild Card • Division Series • LCS • World Series'
+  // Generate the last 10 years dynamically (2026 down to 2017)
+  const lastTenYears = Array.from({ length: 10 }, (_, i) => currentYear - i);
+
+  const handleCustomYearSubmit = (e) => {
+    e.preventDefault();
+    const yr = parseInt(customYear, 10);
+    if (yr >= 1995 && yr <= currentYear) {
+      navigate(`/sports/baseball/competitions/mlb/seasons/${yr}?segment=regular`);
+    } else {
+      alert(`Please enter a valid historical year between 1995 and ${currentYear}.`);
     }
-  ];
+  };
 
   return (
     <div className="mlb-hub-container">
@@ -45,59 +27,67 @@ export default function MlbHome() {
         <div className="mlb-hero-badge">Major League Baseball</div>
         <h1 className="mlb-hero-title">MLB Statistics Hub</h1>
         <p className="mlb-hero-subtitle">
-          Stateless statistical exploration across active and historical MLB campaigns.
+          Stateless statistical exploration across historical campaigns from 1995 onward.
           Explore divisional standings, team splits, and complete player rosters.
         </p>
       </header>
 
-      {/* Primary MVP Season Selector */}
+      {/* Last 10 Years Quick Grid */}
       <section className="mlb-season-section">
         <div className="section-header">
-          <h2>Select Season & Competition</h2>
-          <span className="section-meta">MVP Coverage: 2025 – 2026</span>
+          <h2>Recent Seasons (Last 10 Years)</h2>
+          <span className="section-meta">2017 – 2026 Campaigns</span>
         </div>
 
         <div className="season-cards-grid">
-          {activeSeasons.map((item) => (
+          {lastTenYears.map((yr) => (
             <Link
-              key={`${item.year}-${item.segment}`}
-              to={`/sports/baseball/competitions/mlb/seasons/${item.year}?segment=${item.segment}`}
-              className={`season-card ${item.status}`}
+              key={yr}
+              to={`/sports/baseball/competitions/mlb/seasons/${yr}?segment=regular`}
+              className="season-card active"
             >
               <div className="season-card-top">
-                <span className="season-year">{item.year}</span>
-                <span className={`status-pill ${item.segment}`}>
-                  {item.tag}
+                <span className="season-year">{yr}</span>
+                <span className="status-pill regular">
+                  {yr === 2026 ? 'In-Flight / Final' : 'Regular Season'}
                 </span>
               </div>
-
-              <h3 className="season-card-title">{item.title}</h3>
-              <p className="season-card-desc">{item.description}</p>
-
+              <h3 className="season-card-title">{yr} Campaign</h3>
+              <p className="season-card-desc">
+                Division standings, team win-loss results, and full player stint statistics for {yr}.
+              </p>
               <div className="season-card-footer">
-                <span className="footer-summary">{item.statsSummary}</span>
-                <span className="arrow-btn">Explore →</span>
+                <span className="footer-summary">30 Teams • 6 Divisions</span>
+                <span className="arrow-btn">View Standings →</span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Historical Archive Teaser (Architecture Scaffold) */}
+      {/* Historical Season Jump Back Input (1995–2016) */}
       <section className="mlb-archive-section">
         <div className="archive-card">
           <div className="archive-info">
-            <h3>Historical Archives (1995 – 2024)</h3>
+            <h3>Historical Archive (1995 – 2016)</h3>
             <p>
-              Archival data extending back to the conclusion of the 1994–1995 MLB player strike.
+              Access any specific season back to the post-strike era in 1995.
             </p>
           </div>
-          <Link
-            to="/competitions/mlb-archive/maintenance"
-            className="archive-btn"
-          >
-            Archive Staging (Maintenance)
-          </Link>
+          <form onSubmit={handleCustomYearSubmit} className="archive-form">
+            <input
+              type="number"
+              min="1995"
+              max="2016"
+              placeholder="Enter year (1995-2016)"
+              value={customYear}
+              onChange={(e) => setCustomYear(e.target.value)}
+              className="archive-input"
+            />
+            <button type="submit" className="archive-btn">
+              Go to Season →
+            </button>
+          </form>
         </div>
       </section>
     </div>
