@@ -12,6 +12,7 @@ DIVISION_ORDER = [
     "National League West"
 ]
 
+# Get the standings for a specific MLB season (regular season only)
 @router.get("/seasons/{year}/standings")
 async def get_regular_season_standings(year: int):
     if year < 1995 or year > 2026:
@@ -75,7 +76,7 @@ async def get_regular_season_standings(year: int):
         "divisions": divisions
     }
 
-
+#Get a specific team's season profile, including roster and stats
 @router.get("/seasons/{year}/teams/{team_id}")
 async def get_team_season_profile(
     year: int,
@@ -92,7 +93,8 @@ async def get_team_season_profile(
         f"https://statsapi.mlb.com/api/v1/standings"
         f"?leagueId=103,104&season={year}&standingsTypes=regularSeason"
     )
-    # Correct hydration to fetch individual player stint statistics through the full-season roster feed
+    
+    # Hydrate roster members with person details and season stats for this team
     roster_url = (
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster"
         f"?season={year}&rosterType=fullSeason"
@@ -110,6 +112,7 @@ async def get_team_season_profile(
     team_data = team_resp.json().get("teams", [{}])[0]
     division_id = team_data.get("division", {}).get("id")
 
+    # 1. Division Standings & Team Record
     division_teams = []
     division_name = "Division"
     team_record = {"wins": 0, "losses": 0, "pct": ".000", "gamesBack": "-", "divisionRank": 99}
@@ -136,6 +139,7 @@ async def get_team_season_profile(
 
     division_teams.sort(key=lambda x: x["divisionRank"])
 
+    # 2. Extract Individual Player Stints from Roster Hydration
     pitchers = []
     position_players = []
 
@@ -145,13 +149,10 @@ async def get_team_season_profile(
         for member in roster_members:
             person = member.get("person", {})
             player_id = person.get("id")
-            player_name = person.get("fullName")
-            if not player_id or not player_name:
-                continue
-
+            player_name = person.get("fullName", "Unknown Player")
             position = member.get("position", {}).get("abbreviation", "-")
-            stats_blocks = person.get("stats", [])
 
+            stats_blocks = person.get("stats", [])
             hitting_stat = None
             pitching_stat = None
             fielding_stat = None
@@ -161,7 +162,21 @@ async def get_team_season_profile(
                 splits = sb.get("splits", [])
                 if not splits:
                     continue
-                st = splits[0].get("stat", {})
+                
+                # Find the split matching our team ID and game type
+                target_split = None
+                for sp in splits:
+                    sp_team = sp.get("team", {}).get("id")
+                    sp_game_type = sp.get("gameType", game_type)
+                    if sp_team == team_id and sp_game_type == game_type:
+                        target_split = sp
+                        break
+                
+                if not target_split:
+                    # Fallback to first available split if team ID filter is implicit
+                    target_split = splits[0]
+
+                st = target_split.get("stat", {})
                 if group_name == "hitting":
                     hitting_stat = st
                 elif group_name == "pitching":
@@ -169,12 +184,12 @@ async def get_team_season_profile(
                 elif group_name == "fielding":
                     fielding_stat = st
 
-            # Filter & parse Pitchers
+            # Append Pitcher if they logged pitching stats
             if pitching_stat and (pitching_stat.get("gamesPitched", 0) > 0 or float(pitching_stat.get("inningsPitched", 0) or 0) > 0):
                 pitchers.append({
                     "id": player_id,
                     "name": player_name,
-                    "position": position if position != "-" else "P",
+                    "position": position,
                     "w": pitching_stat.get("wins", 0),
                     "l": pitching_stat.get("losses", 0),
                     "era": pitching_stat.get("era", "-.--"),
@@ -190,7 +205,7 @@ async def get_team_season_profile(
                     "whip": pitching_stat.get("whip", "-.--")
                 })
 
-            # Filter & parse Position Players
+            # Append Position Player if they logged hitting stats or are primary position players
             if hitting_stat and (hitting_stat.get("gamesPlayed", 0) > 0 or hitting_stat.get("atBats", 0) > 0 or position != "P"):
                 f_games = fielding_stat.get("games", 0) if fielding_stat else 0
                 f_po = fielding_stat.get("putOuts", 0) if fielding_stat else 0
@@ -228,6 +243,7 @@ async def get_team_season_profile(
                     }
                 })
 
+    # Sort hitters by at-bats descending, pitchers by innings pitched descending
     position_players.sort(key=lambda x: x["hitting"]["ab"], reverse=True)
     pitchers.sort(
         key=lambda x: float(x["ip"]) if str(x["ip"]).replace(".", "", 1).isdigit() else 0.0,
@@ -249,3 +265,85 @@ async def get_team_season_profile(
         "pitchers": pitchers,
         "positionPlayers": position_players
     }
+
+# Get a specific player's baseball card, including biographical info and season stats
+@router.get("/players/{player_id}")
+async def get_player_baseball_card(player_id: int):
+    person_url = f"https://statsapi.mlb.com/api/v1/people/{player_id}"
+    stats_url = f"https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=yearByYear&group=hitting,pitching"
+
+    async with httpx.AsyncClient() as client:
+        person_resp = await client.get(person_url, timeout=10.0)
+        stats_resp = await client.get(stats_url, timeout=10.0)
+
+        if person_resp.status_code != 200:
+            raise HTTPException(status_code=404, detail="Player not found in MLB database.")
+        
+        person_data = person_resp.json()
+        people = person_data.get("people", [])
+        if not people:
+            raise HTTPException(status_code=404, detail="Player details unavailable.")
+
+        person = people[0]
+        
+        player_info = {
+            "id": person.get("id"),
+            "fullName": person.get("fullName", "Unknown Player"),
+            "birthDate": person.get("birthDate", "Unknown"),
+            "primaryPosition": person.get("primaryPosition", {}).get("abbreviation", "-"),
+            "batSide": person.get("batSide", {}).get("description", "-"),
+            "pitchHand": person.get("pitchHand", {}).get("description", "-"),
+        }
+
+        seasons_map = {}
+        
+        if stats_resp.status_code == 200:
+            stats_json = stats_resp.json()
+            stats_blocks = stats_json.get("stats", [])
+
+            for block in stats_blocks:
+                group_name = block.get("group", {}).get("displayName")  # "hitting" or "pitching"
+                splits = block.get("splits", [])
+                
+                for split in splits:
+                    season_year = int(split.get("season", 0))
+                    team_name = split.get("team", {}).get("name", "Multiple / Other")
+                    st = split.get("stat", {})
+
+                    if season_year not in seasons_map:
+                        seasons_map[season_year] = {
+                            "year": season_year,
+                            "team": team_name,
+                            "hitting": None,
+                            "pitching": None
+                        }
+
+                    if group_name == "hitting":
+                        seasons_map[season_year]["hitting"] = {
+                            "g": st.get("gamesPlayed", 0),
+                            "ab": st.get("atBats", 0),
+                            "h": st.get("hits", 0),
+                            "hr": st.get("homeRuns", 0),
+                            "rbi": st.get("rbi", 0),
+                            "avg": st.get("avg", ".000"),
+                            "ops": st.get("ops", ".000")
+                        }
+                    elif group_name == "pitching":
+                        seasons_map[season_year]["pitching"] = {
+                            "w": st.get("wins", 0),
+                            "l": st.get("losses", 0),
+                            "era": st.get("era", "-.--"),
+                            "g": st.get("gamesPitched", 0),
+                            "ip": st.get("inningsPitched", "0.0"),
+                            "so": st.get("strikeOuts", 0),
+                            "whip": st.get("whip", "-.--")
+                        }
+
+        # Convert map to list and sort from most recent season to earliest season
+        seasons_list = list(seasons_map.values())
+        seasons_list.sort(key=lambda x: x["year"], reverse=True)
+
+        return {
+            "player": player_info,
+            "seasons": seasons_list
+        }

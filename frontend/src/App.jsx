@@ -4,6 +4,7 @@ import LeftNav from './components/navigation/LeftNav';
 import MlbHome from './pages/baseball/mlb/MlbHome';
 import CompetitionSeason from './pages/baseball/mlb/CompetitionSeason';
 import TeamSeason from './pages/baseball/mlb/TeamSeason';
+import BaseballCard from './pages/baseball/mlb/BaseballCard';
 
 function PlaceholderPage({ title, note }) {
   return (
@@ -41,11 +42,8 @@ export default function App() {
               element={<TeamSeason />} 
             />
 
-            {/* Player Digital Baseball Card (Future leaf node) */}
-            <Route 
-              path="/sports/baseball/players/:playerId" 
-              element={<PlaceholderPage title="Baseball Card Profile" note="Player career logs and bio vitals." />} 
-            />
+            {/* Player Digital Baseball Card */}
+            <Route path="/sports/baseball/players/:playerId" element={<BaseballCard />} />
 
             <Route path="/sports/:sportSlug" element={<PlaceholderPage title="Sport Hub" note="Directory of competitions." />} />
             <Route path="/competitions/:slug/maintenance" element={<PlaceholderPage title="Under Construction" note="Content to be created, come back again later." />} />
