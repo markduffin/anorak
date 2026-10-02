@@ -1,0 +1,153 @@
+.card-container {
+  padding: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card-breadcrumbs {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.card-breadcrumbs a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.card-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.crumb-sep {
+  margin: 0 0.5rem;
+}
+
+.crumb-active {
+  color: #94a3b8;
+}
+
+.baseball-card-badge {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 2px solid #38bdf8;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.2);
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.player-pos-badge {
+  display: inline-block;
+  background-color: #0369a1;
+  color: #e0f2fe;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.player-fullname {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #f8fafc;
+  margin: 0 0 0.5rem 0;
+}
+
+.vitals-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.card-logo-watermark {
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #475569;
+  border: 1px dashed #334155;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.season-history-section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0 0 0.25rem 0;
+}
+
+.section-desc {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 1.25rem 0;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.card-season-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  text-align: right;
+  white-space: nowrap;
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-season-table th,
+.card-season-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.card-season-table th {
+  color: #64748b;
+  font-weight: 600;
+  background-color: #0b1329;
+}
+
+.card-season-table tbody tr:hover {
+  background-color: #16243f;
+}
+
+.th-year,
+.td-year {
+  text-align: center;
+  font-weight: 700;
+}
+
+.year-link {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.year-link:hover {
+  text-decoration: underline;
+}
+
+.th-team,
+.td-team {
+  text-align: left;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.td-empty {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+}

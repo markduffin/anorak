@@ -185,14 +185,15 @@
   color: #38bdf8;
 }
 
-/* Roster Scroll Container - Caps height to ~12 rows with sticky headers */
+/* Roster Scroll Container - Caps height to ~12 rows with vertical & horizontal overflow enabled */
 .roster-scroll-container {
   max-height: 520px;
   overflow-y: auto;
+  overflow-x: auto; /* Enables horizontal scrollbar on condensed viewports */
 }
 
 .table-responsive {
-  overflow-x: auto;
+  width: 100%;
 }
 
 .stat-table {
@@ -216,6 +217,17 @@
   position: sticky;
   top: 0;
   z-index: 2;
+}
+
+.stat-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.stat-table th.sortable:hover {
+  color: #38bdf8;
+  background-color: #131e36;
 }
 
 .stat-table tbody tr:hover {
@@ -297,7 +309,6 @@
   background-color: #0b1329;
 }
 
-.sidebar-standings-table .th-left,
 .sidebar-standings-table .th-left {
   text-align: left;
 }
